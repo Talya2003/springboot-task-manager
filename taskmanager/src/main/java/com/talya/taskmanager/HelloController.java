@@ -32,4 +32,12 @@ public class HelloController {
 
         return task;
     }
+
+    @DeleteMapping("/tasks/{id}")
+    public String deleteTask(@PathVariable Long id) {
+
+        tasks.removeIf(task -> task.getId().equals(id));
+
+        return "Task deleted!";
+    }
 }
