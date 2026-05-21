@@ -2,17 +2,15 @@ package com.talya.taskmanager;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class HelloController {
 
-    private List<Task> tasks = new ArrayList<>();
+    private final TaskService taskService;
 
-    public HelloController() {
-        tasks.add(new Task(1L, "Learn Spring Boot"));
-        tasks.add(new Task(2L, "Build REST API"));
+    public HelloController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @GetMapping("/")
@@ -22,22 +20,17 @@ public class HelloController {
 
     @GetMapping("/tasks")
     public List<Task> getTasks() {
-        return tasks;
+        return taskService.getTasks();
     }
 
     @PostMapping("/tasks")
     public Task createTask(@RequestBody Task task) {
-
-        tasks.add(task);
-
-        return task;
+        return taskService.createTask(task);
     }
 
     @DeleteMapping("/tasks/{id}")
     public String deleteTask(@PathVariable Long id) {
-
-        tasks.removeIf(task -> task.getId().equals(id));
-
+        taskService.deleteTask(id);
         return "Task deleted!";
     }
 }
